@@ -1,7 +1,6 @@
 import React from "react";
-import { faker } from "@faker-js/faker";
 
-import type { Event, NewEvent } from "../../data/events";
+import type { Event } from "../../data/events";
 import { EventsContext } from "./Events.Context";
 
 export const EventsProvider = ({
@@ -10,20 +9,8 @@ export const EventsProvider = ({
 }: React.PropsWithChildren<{ initialEvents: Event[] }>) => {
   const [events, setEvents] = React.useState(initialEvents);
 
-  const addEvent = React.useCallback((newEvent: NewEvent) => {
-    setEvents((currentEvents) => [
-      ...currentEvents,
-      {
-        ...newEvent,
-        id: faker.string.uuid(),
-        canMove: true,
-        canResize: true,
-        className: "",
-        itemProps: {
-          "data-tip": newEvent.title,
-        },
-      },
-    ]);
+  const addEvent = React.useCallback((newEvent: Event) => {
+    setEvents((currentEvents) => [...currentEvents, newEvent]);
   }, []);
 
   const updateEvent = React.useCallback(

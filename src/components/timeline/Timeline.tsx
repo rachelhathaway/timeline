@@ -30,7 +30,12 @@ export const Timeline = ({ groups }: TimelineProps) => {
     if (dayjs(time).isAfter(dayjs()) && group) {
       openDialog(
         <Form
-          event={{ group: group.id.toString(), start_time: time }}
+          event={{
+            end_time: dayjs(time).add(2, "hours").valueOf(),
+            group: group.id.toString(),
+            start_time: time,
+            title: "",
+          }}
           onSave={(formData) => {
             addEvent(formData);
             closeDialog();

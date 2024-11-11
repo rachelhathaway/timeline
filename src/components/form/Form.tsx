@@ -3,13 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { faker } from "@faker-js/faker";
 
 import { type Event, EventSchema } from "../../data/events";
-import dayjs from "dayjs";
 
 type FormProps = {
-  event: Partial<Event> & {
-    group: Event["group"];
-    start_time: Event["start_time"];
-  };
+  event: Partial<Event> &
+    Pick<Event, "end_time" | "group" | "start_time" | "title">;
   onDelete?: () => void;
   onSave: (event: Event) => void;
 };
@@ -24,12 +21,10 @@ export const Form = ({ event, onDelete, onSave }: FormProps) => {
       canMove: true,
       canResize: true,
       className: "",
-      end_time: dayjs(event.start_time).add(2, "hours").valueOf(),
       id: faker.string.uuid(),
       itemProps: {
         "data-tip": "",
       },
-      title: "",
       ...event,
     },
     resolver: zodResolver(EventSchema),
