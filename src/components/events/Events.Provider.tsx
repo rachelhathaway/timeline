@@ -26,14 +26,6 @@ export const EventsProvider = ({
     ]);
   }, []);
 
-  const deleteEvent = React.useCallback(
-    (eventId: string) =>
-      setEvents((currentEvents) =>
-        currentEvents.filter((event) => event.id !== eventId)
-      ),
-    []
-  );
-
   const updateEvent = React.useCallback(
     (eventId: string, updater: (event: Event) => Partial<Event>) => {
       setEvents((currentEvents) => {
@@ -53,6 +45,14 @@ export const EventsProvider = ({
       });
     },
     []
+  );
+
+  const deleteEvent = React.useCallback(
+    (eventId: string) =>
+      updateEvent(eventId, () => ({
+        className: "item-deleted",
+      })),
+    [updateEvent]
   );
 
   return (

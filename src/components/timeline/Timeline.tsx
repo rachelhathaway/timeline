@@ -6,9 +6,11 @@ import ReactCalendarTimeline, {
 import dayjs from "dayjs";
 
 import "react-calendar-timeline/lib/Timeline.css";
+import "./Timeline.css";
 
 import { DialogContext } from "../dialog/Dialog.Context";
 import { EventsContext } from "../events/Events.Context";
+import { Form } from "../form/Form";
 
 type Item = TimelineItemBase<number> & {
   itemProps: React.HTMLAttributes<HTMLDivElement> & { "data-tip": string };
@@ -18,17 +20,22 @@ type TimelineProps = Pick<ReactCalendarTimelineProps, "groups">;
 
 export const Timeline = ({ groups }: TimelineProps) => {
   const today = dayjs();
-  const { openDialog } = React.useContext(DialogContext);
-  const { events, updateEvent } = React.useContext(EventsContext);
+  const { closeDialog, openDialog } = React.useContext(DialogContext);
+  const { events, addEvent, deleteEvent, updateEvent } =
+    React.useContext(EventsContext);
 
   const handleCanvasDoubleClick = (groupId: string, time: number) => {
     const group = groups.find((g) => g.id === groupId);
 
     if (dayjs(time).isAfter(dayjs()) && group) {
       openDialog(
-        <div>
-          <p>{group?.title}</p>
-        </div>
+        <Form
+          event={{ group: group.id.toString(), start_time: time }}
+          onSave={(formData) => {
+            addEvent(formData);
+            closeDialog();
+          }}
+        />
       );
     }
   };
@@ -62,9 +69,17 @@ export const Timeline = ({ groups }: TimelineProps) => {
 
     if (clickedEvent && dayjs(clickedEvent.start_time).isAfter(dayjs())) {
       openDialog(
-        <div>
-          <p>{clickedEvent?.title}</p>
-        </div>
+        <Form
+          event={clickedEvent}
+          onDelete={() => {
+            deleteEvent(clickedEvent.id);
+            closeDialog();
+          }}
+          onSave={(formData) => {
+            updateEvent(clickedEvent.id, () => formData);
+            closeDialog();
+          }}
+        />
       );
     }
   };
