@@ -12,11 +12,13 @@
   "dependencies": {
     "@anatine/zod-mock": "^3.13.4",
     "@faker-js/faker": "^9.2.0",
+    "@hookform/resolvers": "^3.9.1",
     "dayjs": "^1.11.13",
     "interactjs": "^1.10.27",
     "react": "^18.3.1",
     "react-calendar-timeline": "^0.28.0",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.53.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
