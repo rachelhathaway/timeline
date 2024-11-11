@@ -43,7 +43,7 @@ export const generateMockEvent = (groupId: string, startDate: number) => {
   const className = getClassName(startDate);
   const endTime = getEndTime(startDate);
   const startTime = getStartTime(startDate);
-  const title = faker.hacker.phrase();
+  const title = faker.lorem.words({ min: 3, max: 100 }).slice(0, 35);
   const mockEvent = {
     ...generateMock(EventSchema, {
       stringMap: {
