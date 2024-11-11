@@ -2,7 +2,7 @@ import React from "react";
 
 import dayjs from "dayjs";
 
-import { Timeline } from "./components/Timeline";
+import { Timeline } from "./components/timeline/Timeline";
 import { generateData } from "./data/composed";
 import type { Event } from "./data/events";
 
