@@ -12,6 +12,7 @@ export const GroupSchema = z.object({
 export const generateMockGroup = (user: User) =>
   generateMock(GroupSchema, {
     stringMap: {
+      id: () => user.id,
       rightTitle: () => user.lastName,
       title: () => user.firstName,
     },
