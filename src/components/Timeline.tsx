@@ -10,7 +10,7 @@ type Item = TimelineItemBase<number> & {
 
 type TimelineProps = Pick<
   ReactCalendarTimelineProps,
-  "groups" | "onItemMove" | "onItemResize"
+  "groups" | "onCanvasDoubleClick" | "onItemMove" | "onItemResize"
 > & {
   defaultTimeEnd: Date;
   defaultTimeStart: Date;

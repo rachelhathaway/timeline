@@ -30,6 +30,13 @@ const App = () => {
   const today = dayjs();
   const [events, setEvents] = React.useState<Event[]>(initialEvents);
 
+  const handleCanvasDoubleClick = (groupId: string, time: number) => {
+    // use to add event
+    const group = groups.find((g) => g.id === groupId);
+
+    alert(`Add event to ${group?.title}'s calendar?`);
+  };
+
   const handleEventMove = (
     eventId: string,
     newStartTime: number,
@@ -65,6 +72,7 @@ const App = () => {
       defaultTimeStart={today.startOf("day").toDate()}
       groups={groups}
       items={events}
+      onCanvasDoubleClick={handleCanvasDoubleClick}
       onItemMove={handleEventMove}
       onItemResize={handleEventResize}
     />
