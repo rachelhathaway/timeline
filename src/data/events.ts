@@ -4,6 +4,8 @@ import { faker } from "@faker-js/faker";
 import dayjs from "dayjs";
 
 export const EventSchema = z.object({
+  canMove: z.boolean(),
+  canResize: z.boolean(),
   className: z.string(),
   end_time: z.number(),
   group: z.string().uuid(),
@@ -16,6 +18,8 @@ export const EventSchema = z.object({
 });
 
 export type Event = z.infer<typeof EventSchema>;
+
+const getCanEdit = (startTime: number) => dayjs(startTime).isAfter(dayjs());
 
 const getClassName = (startDate: number) => {
   const day = dayjs(startDate).day();
@@ -44,6 +48,8 @@ export const generateMockEvent = (groupId: string, startDate: number) => {
         title: () => title,
       },
     }),
+    canMove: getCanEdit(startTime),
+    canResize: getCanEdit(startTime),
     itemProps: {
       "data-tip": title,
     },
