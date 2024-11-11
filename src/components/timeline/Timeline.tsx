@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 
 import "react-calendar-timeline/lib/Timeline.css";
 
+import { DialogContext } from "../dialog/Dialog.Context";
 import { EventsContext } from "../events/Events.Context";
 
 type Item = TimelineItemBase<number> & {
@@ -17,13 +18,19 @@ type TimelineProps = Pick<ReactCalendarTimelineProps, "groups">;
 
 export const Timeline = ({ groups }: TimelineProps) => {
   const today = dayjs();
+  const { openDialog } = React.useContext(DialogContext);
   const { events, updateEvent } = React.useContext(EventsContext);
 
   const handleCanvasDoubleClick = (groupId: string, time: number) => {
-    // use to add event
     const group = groups.find((g) => g.id === groupId);
 
-    alert(`Add event to ${group?.title}'s calendar?`);
+    if (dayjs(time).isAfter(dayjs()) && group) {
+      openDialog(
+        <div>
+          <p>{group?.title}</p>
+        </div>
+      );
+    }
   };
 
   const handleEventMove = (
@@ -50,6 +57,18 @@ export const Timeline = ({ groups }: TimelineProps) => {
       start_time: edge === "left" ? newTime : event.start_time,
     }));
 
+  const handleItemDoubleClick = (eventId: string) => {
+    const clickedEvent = events.find((event) => event.id === eventId);
+
+    if (clickedEvent && dayjs(clickedEvent.start_time).isAfter(dayjs())) {
+      openDialog(
+        <div>
+          <p>{clickedEvent?.title}</p>
+        </div>
+      );
+    }
+  };
+
   return (
     <ReactCalendarTimeline<Item>
       canResize="both"
@@ -58,6 +77,7 @@ export const Timeline = ({ groups }: TimelineProps) => {
       groups={groups}
       items={events}
       onCanvasDoubleClick={handleCanvasDoubleClick}
+      onItemDoubleClick={handleItemDoubleClick}
       onItemMove={handleEventMove}
       onItemResize={handleEventResize}
     />
