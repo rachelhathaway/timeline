@@ -15,6 +15,8 @@ export const EventSchema = z.object({
   title: z.string().min(5).max(35),
 });
 
+export type Event = z.infer<typeof EventSchema>;
+
 const getClassName = (startDate: number) => {
   const day = dayjs(startDate).day();
 
