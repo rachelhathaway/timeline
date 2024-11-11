@@ -1,10 +1,10 @@
 import React from "react";
 
-import { Event } from "../../data/events";
+import type { Event, NewEvent } from "../../data/events";
 
 export const EventsContext = React.createContext<{
   events: Event[];
-  addEvent: (newEvent: Omit<Event, "id">) => void;
+  addEvent: (newEvent: NewEvent) => void;
   deleteEvent: (eventId: string) => void;
   updateEvent: (
     eventId: string,
