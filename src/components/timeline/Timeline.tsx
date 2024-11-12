@@ -58,7 +58,7 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
     const movedEvent = events.find((event) => event.id === eventId);
     const newGroup = groups[newGroupIndex];
 
-    if (movedEvent) {
+    if (movedEvent && dayjs(newStartTime).isAfter(dayjs())) {
       updateEvent(eventId, {
         end_time: newStartTime + (movedEvent.end_time - movedEvent.start_time),
         group: newGroup.id.toString(),
