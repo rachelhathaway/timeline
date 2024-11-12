@@ -62,6 +62,7 @@ export const Form = ({ eventData, onDelete, onSave, users }: FormProps) => {
         <select {...register("group")} id="event-group">
           {users.map((user) => (
             <option
+              key={user.id}
               value={user.id}
             >{`${user.firstName} ${user.lastName}`}</option>
           ))}
