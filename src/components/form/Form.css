@@ -1,0 +1,38 @@
+form.event-form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  min-width: 300px;
+  margin-top: 1rem;
+}
+
+form.event-form > div {
+  width: 100%;
+}
+
+form.event-form > div:last-child {
+  display: flex;
+  justify-content: space-between;
+}
+
+form.event-form input {
+  width: 100%;
+}
+
+form.event-form button {
+  color: var(--white);
+}
+
+form.event-form button:first-child {
+  background-color: var(--red);
+}
+
+form.event-form button:last-child {
+  background-color: var(--blue);
+}
+
+form.event-form .error-text {
+  color: var(--red);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}

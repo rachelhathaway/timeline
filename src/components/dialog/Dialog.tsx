@@ -11,7 +11,9 @@ export const Dialog = React.forwardRef<
   React.PropsWithChildren<DialogProps>
 >(({ children, closeDialog }, ref) => (
   <dialog ref={ref}>
-    <button onClick={closeDialog}>Close</button>
+    <div>
+      <button onClick={closeDialog}>X</button>
+    </div>
     {children}
   </dialog>
 ));

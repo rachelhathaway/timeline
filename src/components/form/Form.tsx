@@ -4,6 +4,8 @@ import { faker } from "@faker-js/faker";
 
 import { type Event, EventSchema } from "../../data/events";
 
+import "./Form.css";
+
 type FormProps = {
   event: Partial<Event> &
     Pick<Event, "end_time" | "group" | "start_time" | "title">;
@@ -32,6 +34,7 @@ export const Form = ({ event, onDelete, onSave }: FormProps) => {
 
   return (
     <form
+      className="event-form"
       onSubmit={handleSubmit((data) => {
         const newEvent = {
           ...data,
@@ -44,17 +47,19 @@ export const Form = ({ event, onDelete, onSave }: FormProps) => {
       })}
     >
       <div>
-        <label htmlFor="event-title"></label>
+        <label htmlFor="event-title">Event Name</label>
         <input id="event-title" {...register("title")} />
-        {errors.title && <p>{errors.title.message}</p>}
+        {errors.title && <p className="error-text">{errors.title.message}</p>}
       </div>
       <div>
-        {onDelete && (
+        {onDelete ? (
           <button onClick={onDelete} type="button">
             Delete
           </button>
+        ) : (
+          <div />
         )}
-        <input type="submit" />
+        <button type="submit">Submit</button>
       </div>
     </form>
   );
