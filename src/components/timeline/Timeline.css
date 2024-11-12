@@ -7,3 +7,9 @@
 .item-deleted {
   display: none;
 }
+
+.rct-dateHeader-primary > span {
+  position: sticky;
+  left: 0;
+  padding: 0 0.5rem;
+}
