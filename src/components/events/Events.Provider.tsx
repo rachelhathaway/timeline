@@ -36,10 +36,10 @@ export const EventsProvider = ({
 
   const deleteEvent = React.useCallback(
     (eventId: string) =>
-      updateEvent(eventId, () => ({
-        className: "item-deleted",
-      })),
-    [updateEvent]
+      setEvents((currentEvents) =>
+        currentEvents.filter((event) => event.id !== eventId)
+      ),
+    []
   );
 
   return (
