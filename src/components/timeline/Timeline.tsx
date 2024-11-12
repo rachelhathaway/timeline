@@ -51,24 +51,32 @@ export const Timeline = ({ groups }: TimelineProps) => {
     newStartTime: number,
     newGroupIndex: number
   ) => {
+    const movedEvent = events.find((event) => event.id === eventId);
     const newGroup = groups[newGroupIndex];
 
-    updateEvent(eventId, (event) => ({
-      end_time: newStartTime + (event.end_time - event.start_time),
-      group: newGroup.id.toString(),
-      start_time: newStartTime,
-    }));
+    if (movedEvent) {
+      updateEvent(eventId, {
+        end_time: newStartTime + (movedEvent.end_time - movedEvent.start_time),
+        group: newGroup.id.toString(),
+        start_time: newStartTime,
+      });
+    }
   };
 
   const handleEventResize = (
     eventId: string,
     newTime: number,
     edge: "left" | "right"
-  ) =>
-    updateEvent(eventId, (event) => ({
-      end_time: edge === "left" ? event.end_time : newTime,
-      start_time: edge === "left" ? newTime : event.start_time,
-    }));
+  ) => {
+    const resizedEvent = events.find((event) => event.id === eventId);
+
+    if (resizedEvent) {
+      updateEvent(eventId, {
+        end_time: edge === "left" ? resizedEvent.end_time : newTime,
+        start_time: edge === "left" ? newTime : resizedEvent.start_time,
+      });
+    }
+  };
 
   const handleItemDoubleClick = (eventId: string) => {
     const clickedEvent = events.find((event) => event.id === eventId);
@@ -87,11 +95,11 @@ export const Timeline = ({ groups }: TimelineProps) => {
             closeDialog();
           }}
           onSave={(formData) => {
-            updateEvent(clickedEvent.id, () => ({
+            updateEvent(clickedEvent.id, {
               ...formData,
               end_time: dayjs(formData.end_time).valueOf(),
               start_time: dayjs(formData.start_time).valueOf(),
-            }));
+            });
             closeDialog();
           }}
         />

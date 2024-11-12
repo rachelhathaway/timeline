@@ -6,10 +6,7 @@ export const EventsContext = React.createContext<{
   events: Event[];
   addEvent: (newEvent: EventFormData) => void;
   deleteEvent: (eventId: string) => void;
-  updateEvent: (
-    eventId: string,
-    updater: (eventToUpdate: Event) => Partial<Event>
-  ) => void;
+  updateEvent: (eventId: string, updatedEventData: Partial<Event>) => void;
 }>({
   events: [],
   addEvent: () => {},

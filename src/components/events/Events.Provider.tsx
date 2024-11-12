@@ -32,7 +32,7 @@ export const EventsProvider = ({
   }, []);
 
   const updateEvent = React.useCallback(
-    (eventId: string, updater: (event: Event) => Partial<Event>) => {
+    (eventId: string, eventData: Partial<Event>) => {
       setEvents((currentEvents) => {
         const eventToUpdateIndex = currentEvents.findIndex(
           (event) => event.id === eventId
@@ -44,7 +44,7 @@ export const EventsProvider = ({
           ...currentEvents.slice(eventToUpdateIndex + 1),
           {
             ...eventToUpdate,
-            ...updater(eventToUpdate),
+            ...eventData,
           },
         ];
       });
