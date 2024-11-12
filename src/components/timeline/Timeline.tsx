@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import "react-calendar-timeline/lib/Timeline.css";
 import "./Timeline.css";
 
+import { User } from "../../data/users";
 import { DialogContext } from "../dialog/Dialog.Context";
 import { EventsContext } from "../events/Events.Context";
 import { Form } from "../form/Form";
@@ -19,9 +20,11 @@ type Item = TimelineItemBase<number> & {
   itemProps: React.HTMLAttributes<HTMLDivElement> & { "data-tip": string };
 };
 
-type TimelineProps = Pick<ReactCalendarTimelineProps, "groups">;
+type TimelineProps = Pick<ReactCalendarTimelineProps, "groups"> & {
+  users: User[];
+};
 
-export const Timeline = ({ groups }: TimelineProps) => {
+export const Timeline = ({ groups, users }: TimelineProps) => {
   const today = dayjs();
   const { closeDialog, openDialog } = React.useContext(DialogContext);
   const { events, addEvent, deleteEvent, updateEvent } =
@@ -41,6 +44,7 @@ export const Timeline = ({ groups }: TimelineProps) => {
             addEvent(formData);
             closeDialog();
           }}
+          users={users}
         />
       );
     }
@@ -102,6 +106,7 @@ export const Timeline = ({ groups }: TimelineProps) => {
             });
             closeDialog();
           }}
+          users={users}
         />
       );
     }

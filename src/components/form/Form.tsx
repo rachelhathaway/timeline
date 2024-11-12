@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { type EventFormData, EventFormSchema } from "../../data/events";
+import { User } from "../../data/users";
 
 import "./Form.css";
 
@@ -15,9 +16,10 @@ type FormProps = {
   };
   onDelete?: () => void;
   onSave: (eventData: EventFormData) => void;
+  users: User[];
 };
 
-export const Form = ({ eventData, onDelete, onSave }: FormProps) => {
+export const Form = ({ eventData, onDelete, onSave, users }: FormProps) => {
   const {
     register,
     formState: { errors },
@@ -49,9 +51,22 @@ export const Form = ({ eventData, onDelete, onSave }: FormProps) => {
       })}
     >
       <div>
-        <label htmlFor="event-title">Event Name</label>
+        <label htmlFor="event-title">Title</label>
         <input {...register("title")} id="event-title" />
         {errors.title && <p className="error-text">{errors.title.message}</p>}
+      </div>
+      <div>
+        <div>
+          <label htmlFor="event-group">Assigned User</label>
+        </div>
+        <select {...register("group")} id="event-group">
+          {users.map((user) => (
+            <option
+              value={user.id}
+            >{`${user.firstName} ${user.lastName}`}</option>
+          ))}
+        </select>
+        {errors.group && <p className="error-text">{errors.group.message}</p>}
       </div>
       <div className="flex">
         <div>
