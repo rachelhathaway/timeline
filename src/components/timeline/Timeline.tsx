@@ -131,7 +131,7 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
           }}
         </SidebarHeader>
         <DateHeader unit="primaryHeader" />
-        <DateHeader />
+        <DateHeader labelFormat="ha" />
       </TimelineHeaders>
     </ReactCalendarTimeline>
   );
