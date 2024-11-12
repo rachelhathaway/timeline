@@ -6,7 +6,7 @@ import { type EventFormData, EventFormSchema } from "../../data/events";
 import { User } from "../../data/users";
 import "./Form.css";
 
-export const dateFormat = "YYYY-MM-DDTHH:mm";
+const dateFormat = "YYYY-MM-DDTHH:mm";
 
 type FormProps = {
   eventData: Pick<EventFormData, "group" | "start_time"> & {

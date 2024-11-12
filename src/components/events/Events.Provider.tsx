@@ -11,8 +11,8 @@ export const EventsProvider = ({
 }: React.PropsWithChildren<{ initialEvents: Event[] }>) => {
   const [events, setEvents] = React.useState(initialEvents);
 
-  const addEvent = React.useCallback((newEvent: EventFormData) => {
-    const { end_time, start_time, ...restFormData } = newEvent;
+  const addEvent = React.useCallback((eventData: EventFormData) => {
+    const { end_time, start_time, ...restEventData } = eventData;
 
     setEvents((currentEvents) => [
       ...currentEvents,
@@ -23,16 +23,16 @@ export const EventsProvider = ({
         end_time: dayjs(end_time).valueOf(),
         id: faker.string.uuid(),
         itemProps: {
-          "data-tip": newEvent.title,
+          "data-tip": eventData.title,
         },
         start_time: dayjs(start_time).valueOf(),
-        ...restFormData,
+        ...restEventData,
       },
     ]);
   }, []);
 
   const updateEvent = React.useCallback(
-    (eventId: string, eventData: Partial<Event>) => {
+    (eventId: string, eventData: Partial<EventFormData>) => {
       setEvents((currentEvents) => {
         const eventToUpdateIndex = currentEvents.findIndex(
           (event) => event.id === eventId

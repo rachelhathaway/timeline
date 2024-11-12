@@ -29,15 +29,15 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
   const { events, addEvent, deleteEvent, updateEvent } =
     React.useContext(EventsContext);
 
-  const handleCanvasDoubleClick = (groupId: string, time: number) => {
-    const group = groups.find((g) => g.id === groupId);
+  const handleCanvasDoubleClick = (groupId: string, startTime: number) => {
+    const selectedGroup = groups.find((group) => group.id === groupId);
 
-    if (dayjs(time).isAfter(dayjs()) && group) {
+    if (dayjs(startTime).isAfter(dayjs()) && selectedGroup) {
       openDialog(
         <Form
           eventData={{
-            group: group.id.toString(),
-            start_time: time,
+            group: selectedGroup.id.toString(),
+            start_time: startTime,
           }}
           onSave={(formData) => {
             addEvent(formData);

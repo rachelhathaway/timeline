@@ -4,8 +4,8 @@ import { faker } from "@faker-js/faker";
 
 export const UserSchema = z.object({
   id: z.string().uuid(),
-  firstName: z.string().min(1),
-  lastName: z.string().min(1),
+  firstName: z.string(),
+  lastName: z.string(),
 });
 
 export type User = z.infer<typeof UserSchema>;
