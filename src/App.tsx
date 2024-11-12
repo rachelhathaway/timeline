@@ -1,5 +1,4 @@
 import { generateData } from "./data/composed";
-
 import { DialogProvider } from "./components/dialog/Dialog.Provider";
 import { EventsProvider } from "./components/events/Events.Provider";
 import { Timeline } from "./components/timeline/Timeline";

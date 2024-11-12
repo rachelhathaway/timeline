@@ -1,7 +1,7 @@
-import { z } from "zod";
 import { generateMock } from "@anatine/zod-mock";
 import { faker } from "@faker-js/faker";
 import dayjs from "dayjs";
+import { z } from "zod";
 
 const IdSchema = z.string().uuid();
 const TitleSchema = z.string().min(5).max(35);

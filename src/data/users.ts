@@ -1,6 +1,5 @@
-import { z } from "zod";
 import { generateMock } from "@anatine/zod-mock";
-
+import { z } from "zod";
 import { faker } from "@faker-js/faker";
 
 export const UserSchema = z.object({

@@ -1,20 +1,19 @@
+import dayjs from "dayjs";
 import React from "react";
 import ReactCalendarTimeline, {
   type ReactCalendarTimelineProps,
   type TimelineItemBase,
-  TimelineHeaders,
-  SidebarHeader,
   DateHeader,
+  SidebarHeader,
+  TimelineHeaders,
 } from "react-calendar-timeline";
-import dayjs from "dayjs";
-
 import "react-calendar-timeline/lib/Timeline.css";
-import "./Timeline.css";
 
 import { User } from "../../data/users";
 import { DialogContext } from "../dialog/Dialog.Context";
 import { EventsContext } from "../events/Events.Context";
 import { Form } from "../form/Form";
+import "./Timeline.css";
 
 type Item = TimelineItemBase<number> & {
   itemProps: React.HTMLAttributes<HTMLDivElement> & { "data-tip": string };

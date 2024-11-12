@@ -1,9 +1,9 @@
-import React from "react";
 import { faker } from "@faker-js/faker";
+import dayjs from "dayjs";
+import React from "react";
 
 import type { Event, EventFormData } from "../../data/events";
 import { EventsContext } from "./Events.Context";
-import dayjs from "dayjs";
 
 export const EventsProvider = ({
   children,

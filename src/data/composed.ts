@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 
+import { generateMockEvent } from "./events";
 import { generateMockGroup } from "./groups";
 import { generateMockUser } from "./users";
-import { generateMockEvent } from "./events";
 
 const getStartDate = (daysInPast: number) =>
   faker.date.recent({ days: daysInPast }).valueOf() +

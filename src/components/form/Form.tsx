@@ -1,10 +1,9 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { type EventFormData, EventFormSchema } from "../../data/events";
 import { User } from "../../data/users";
-
 import "./Form.css";
 
 export const dateFormat = "YYYY-MM-DDTHH:mm";

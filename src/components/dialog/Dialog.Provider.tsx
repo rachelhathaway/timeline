@@ -1,7 +1,7 @@
 import React from "react";
 
-import { DialogContext } from "./Dialog.Context";
 import { Dialog } from "./Dialog";
+import { DialogContext } from "./Dialog.Context";
 
 export const DialogProvider = ({ children }: React.PropsWithChildren) => {
   const dialogRef = React.useRef<HTMLDialogElement | null>(null);
