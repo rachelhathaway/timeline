@@ -2,6 +2,9 @@ import React from "react";
 import ReactCalendarTimeline, {
   type ReactCalendarTimelineProps,
   type TimelineItemBase,
+  TimelineHeaders,
+  SidebarHeader,
+  DateHeader,
 } from "react-calendar-timeline";
 import dayjs from "dayjs";
 
@@ -100,6 +103,16 @@ export const Timeline = ({ groups }: TimelineProps) => {
       onItemDoubleClick={handleItemDoubleClick}
       onItemMove={handleEventMove}
       onItemResize={handleEventResize}
-    />
+    >
+      <TimelineHeaders className="sticky-header">
+        <SidebarHeader>
+          {({ getRootProps }) => {
+            return <div {...getRootProps()} />;
+          }}
+        </SidebarHeader>
+        <DateHeader unit="primaryHeader" />
+        <DateHeader />
+      </TimelineHeaders>
+    </ReactCalendarTimeline>
   );
 };
