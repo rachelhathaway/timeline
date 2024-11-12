@@ -3,18 +3,30 @@ import { generateMock } from "@anatine/zod-mock";
 import { faker } from "@faker-js/faker";
 import dayjs from "dayjs";
 
+const IdSchema = z.string().uuid();
+const TitleSchema = z.string().min(5).max(35);
+
+export const EventFormSchema = z.object({
+  end_time: z.string().datetime(),
+  group: IdSchema,
+  start_time: z.string().datetime(),
+  title: TitleSchema,
+});
+
+export type EventForm = z.infer<typeof EventFormSchema>;
+
 export const EventSchema = z.object({
   canMove: z.boolean(),
   canResize: z.boolean(),
   className: z.string(),
   end_time: z.number(),
-  group: z.string().uuid(),
-  id: z.string().uuid(),
+  group: IdSchema,
+  id: IdSchema,
   itemProps: z.object({
     "data-tip": z.string(),
   }),
   start_time: z.number(),
-  title: z.string().min(5).max(35),
+  title: TitleSchema,
 });
 
 export type Event = z.infer<typeof EventSchema>;

@@ -13,7 +13,7 @@ import "./Timeline.css";
 
 import { DialogContext } from "../dialog/Dialog.Context";
 import { EventsContext } from "../events/Events.Context";
-import { Form } from "../form/Form";
+import { Form, dateFormat } from "../form/Form";
 
 type Item = TimelineItemBase<number> & {
   itemProps: React.HTMLAttributes<HTMLDivElement> & { "data-tip": string };
@@ -34,9 +34,9 @@ export const Timeline = ({ groups }: TimelineProps) => {
       openDialog(
         <Form
           event={{
-            end_time: dayjs(time).add(2, "hours").valueOf(),
+            end_time: dayjs(time).add(2, "hours").format(dateFormat),
             group: group.id.toString(),
-            start_time: time,
+            start_time: dayjs(time).format(dateFormat),
             title: "",
           }}
           onSave={(formData) => {
@@ -78,13 +78,22 @@ export const Timeline = ({ groups }: TimelineProps) => {
     if (clickedEvent && dayjs(clickedEvent.start_time).isAfter(dayjs())) {
       openDialog(
         <Form
-          event={clickedEvent}
+          event={{
+            end_time: dayjs(clickedEvent.end_time).format(dateFormat),
+            group: clickedEvent.group,
+            start_time: dayjs(clickedEvent.start_time).format(dateFormat),
+            title: clickedEvent.title,
+          }}
           onDelete={() => {
             deleteEvent(clickedEvent.id);
             closeDialog();
           }}
           onSave={(formData) => {
-            updateEvent(clickedEvent.id, () => formData);
+            updateEvent(clickedEvent.id, () => ({
+              ...formData,
+              end_time: dayjs(formData.end_time).valueOf(),
+              start_time: dayjs(formData.start_time).valueOf(),
+            }));
             closeDialog();
           }}
         />

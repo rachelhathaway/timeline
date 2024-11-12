@@ -1,7 +1,9 @@
 import React from "react";
+import { faker } from "@faker-js/faker";
 
-import type { Event } from "../../data/events";
+import type { Event, EventForm } from "../../data/events";
 import { EventsContext } from "./Events.Context";
+import dayjs from "dayjs";
 
 export const EventsProvider = ({
   children,
@@ -9,8 +11,24 @@ export const EventsProvider = ({
 }: React.PropsWithChildren<{ initialEvents: Event[] }>) => {
   const [events, setEvents] = React.useState(initialEvents);
 
-  const addEvent = React.useCallback((newEvent: Event) => {
-    setEvents((currentEvents) => [...currentEvents, newEvent]);
+  const addEvent = React.useCallback((newEvent: EventForm) => {
+    const { end_time, start_time, ...restFormData } = newEvent;
+
+    setEvents((currentEvents) => [
+      ...currentEvents,
+      {
+        canMove: true,
+        canResize: true,
+        className: "",
+        end_time: dayjs(end_time).valueOf(),
+        id: faker.string.uuid(),
+        itemProps: {
+          "data-tip": newEvent.title,
+        },
+        start_time: dayjs(start_time).valueOf(),
+        ...restFormData,
+      },
+    ]);
   }, []);
 
   const updateEvent = React.useCallback(

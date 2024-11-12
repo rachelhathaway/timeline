@@ -36,3 +36,8 @@ form.event-form .error-text {
   font-size: 0.9rem;
   margin-top: 0.25rem;
 }
+
+form.event-form .flex {
+  display: flex;
+  column-gap: 1rem;
+}
