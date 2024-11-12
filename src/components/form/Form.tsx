@@ -77,6 +77,7 @@ export const Form = ({ eventData, onDelete, onSave, users }: FormProps) => {
               setValueAs: (value) => dayjs(value).toISOString(),
             })}
             id="start-time"
+            min={dayjs().format(dateFormat)}
             type="datetime-local"
           />
           {errors.start_time && (
