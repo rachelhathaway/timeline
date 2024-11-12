@@ -1,7 +1,7 @@
 import React from "react";
 import { faker } from "@faker-js/faker";
 
-import type { Event, EventForm } from "../../data/events";
+import type { Event, EventFormData } from "../../data/events";
 import { EventsContext } from "./Events.Context";
 import dayjs from "dayjs";
 
@@ -11,7 +11,7 @@ export const EventsProvider = ({
 }: React.PropsWithChildren<{ initialEvents: Event[] }>) => {
   const [events, setEvents] = React.useState(initialEvents);
 
-  const addEvent = React.useCallback((newEvent: EventForm) => {
+  const addEvent = React.useCallback((newEvent: EventFormData) => {
     const { end_time, start_time, ...restFormData } = newEvent;
 
     setEvents((currentEvents) => [

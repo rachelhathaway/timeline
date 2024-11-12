@@ -13,8 +13,6 @@ export const EventFormSchema = z.object({
   title: TitleSchema,
 });
 
-export type EventForm = z.infer<typeof EventFormSchema>;
-
 export const EventSchema = z.object({
   canMove: z.boolean(),
   canResize: z.boolean(),
@@ -30,6 +28,10 @@ export const EventSchema = z.object({
 });
 
 export type Event = z.infer<typeof EventSchema>;
+export type EventFormData = Pick<
+  Event,
+  "end_time" | "group" | "start_time" | "title"
+>;
 
 const getCanEdit = (startTime: number) => dayjs(startTime).isAfter(dayjs());
 

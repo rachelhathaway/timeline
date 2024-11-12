@@ -1,27 +1,37 @@
+import dayjs from "dayjs";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { type EventForm, EventFormSchema } from "../../data/events";
+import { type EventFormData, EventFormSchema } from "../../data/events";
 
 import "./Form.css";
-import dayjs from "dayjs";
 
 export const dateFormat = "YYYY-MM-DDTHH:mm";
 
 type FormProps = {
-  event: EventForm;
+  eventData: Pick<EventFormData, "group" | "start_time"> & {
+    end_time?: EventFormData["end_time"];
+    title?: EventFormData["title"];
+  };
   onDelete?: () => void;
-  onSave: (event: EventForm) => void;
+  onSave: (eventData: EventFormData) => void;
 };
 
-export const Form = ({ event, onDelete, onSave }: FormProps) => {
+export const Form = ({ eventData, onDelete, onSave }: FormProps) => {
   const {
     register,
     formState: { errors },
     handleSubmit,
     watch,
   } = useForm({
-    defaultValues: event,
+    defaultValues: {
+      end_time: eventData.end_time
+        ? dayjs(eventData.end_time).format(dateFormat)
+        : dayjs(eventData.start_time).add(2, "hours").format(dateFormat),
+      group: eventData.group,
+      start_time: dayjs(eventData.start_time).format(dateFormat),
+      title: eventData.title ?? "",
+    },
     resolver: zodResolver(EventFormSchema),
   });
 
@@ -31,7 +41,11 @@ export const Form = ({ event, onDelete, onSave }: FormProps) => {
     <form
       className="event-form"
       onSubmit={handleSubmit((data) => {
-        onSave(data);
+        onSave({
+          ...data,
+          end_time: dayjs(data.end_time).valueOf(),
+          start_time: dayjs(data.start_time).valueOf(),
+        });
       })}
     >
       <div>
