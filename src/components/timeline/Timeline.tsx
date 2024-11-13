@@ -10,6 +10,7 @@ import ReactCalendarTimeline, {
 import "react-calendar-timeline/lib/Timeline.css";
 
 import { User } from "../../data/users";
+import { isTimeInPast } from "../../utils";
 import { DialogContext } from "../dialog/Dialog.Context";
 import { EventsContext } from "../events/Events.Context";
 import { Form } from "../form/Form";
@@ -32,7 +33,7 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
   const handleCanvasDoubleClick = (groupId: string, startTime: number) => {
     const selectedGroup = groups.find((group) => group.id === groupId);
 
-    if (dayjs(startTime).isAfter(dayjs()) && selectedGroup) {
+    if (!isTimeInPast(startTime) && selectedGroup) {
       openDialog(
         <Form
           eventData={{
@@ -57,7 +58,7 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
     const movedEvent = events.find((event) => event.id === eventId);
     const newGroup = groups[newGroupIndex];
 
-    if (movedEvent && dayjs(newStartTime).isAfter(dayjs())) {
+    if (movedEvent) {
       updateEvent(eventId, {
         end_time: newStartTime + (movedEvent.end_time - movedEvent.start_time),
         group: newGroup.id.toString(),
@@ -84,7 +85,7 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
   const handleItemDoubleClick = (eventId: string) => {
     const clickedEvent = events.find((event) => event.id === eventId);
 
-    if (clickedEvent && dayjs(clickedEvent.start_time).isAfter(dayjs())) {
+    if (clickedEvent && !isTimeInPast(clickedEvent.start_time)) {
       openDialog(
         <Form
           eventData={{

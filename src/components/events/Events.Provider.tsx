@@ -3,12 +3,21 @@ import dayjs from "dayjs";
 import React from "react";
 
 import type { Event, EventFormData } from "../../data/events";
+import {
+  doEventsOverlap,
+  filterEventsByGroup,
+  isEventTooLong,
+  isEventTooShort,
+  isTimeInPast,
+} from "../../utils";
+import { DialogContext } from "../dialog/Dialog.Context";
 import { EventsContext } from "./Events.Context";
 
 export const EventsProvider = ({
   children,
   initialEvents,
 }: React.PropsWithChildren<{ initialEvents: Event[] }>) => {
+  const { openDialog } = React.useContext(DialogContext);
   const [events, setEvents] = React.useState(initialEvents);
 
   const addEvent = React.useCallback((eventData: EventFormData) => {
@@ -38,18 +47,51 @@ export const EventsProvider = ({
           (event) => event.id === eventId
         );
         const eventToUpdate = currentEvents[eventToUpdateIndex];
+        const updatedEvent = {
+          ...eventToUpdate,
+          ...eventData,
+        };
+
+        if (isTimeInPast(updatedEvent.start_time)) {
+          openDialog("Cannot move event start to the past");
+
+          return currentEvents;
+        }
+
+        if (isEventTooLong(updatedEvent)) {
+          openDialog("Event duration cannot exceed 24 hours");
+
+          return currentEvents;
+        }
+
+        if (isEventTooShort(updatedEvent)) {
+          openDialog("Event end time cannot be before its start time");
+
+          return currentEvents;
+        }
+
+        const eventsInGroup = filterEventsByGroup(
+          currentEvents,
+          updatedEvent.group
+        ).filter((event) => event.id !== updatedEvent.id);
+        const overlappingEvent = eventsInGroup.find((eventInGroup) =>
+          doEventsOverlap(updatedEvent, eventInGroup)
+        );
+
+        if (overlappingEvent) {
+          openDialog("Events cannot overlap");
+
+          return currentEvents;
+        }
 
         return [
           ...currentEvents.slice(0, eventToUpdateIndex),
           ...currentEvents.slice(eventToUpdateIndex + 1),
-          {
-            ...eventToUpdate,
-            ...eventData,
-          },
+          updatedEvent,
         ];
       });
     },
-    []
+    [openDialog]
   );
 
   const deleteEvent = React.useCallback(
