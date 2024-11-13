@@ -30,7 +30,7 @@ export const EventSchema = z.object({
 export type Event = z.infer<typeof EventSchema>;
 export type EventFormData = Pick<
   Event,
-  "end_time" | "group" | "start_time" | "title"
+  "end_time" | "group" | "id" | "start_time" | "title"
 >;
 
 const getCanEdit = (startTime: number) => dayjs(startTime).isAfter(dayjs());

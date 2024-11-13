@@ -1,9 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
+import React from "react";
 import { useForm } from "react-hook-form";
 
-import { type EventFormData, EventFormSchema } from "../../data/events";
+import { Event, type EventFormData, EventFormSchema } from "../../data/events";
 import { User } from "../../data/users";
+import { doEventsOverlap, filterEventsByGroup } from "../../utils";
 import "./Form.css";
 
 const dateFormat = "YYYY-MM-DDTHH:mm";
@@ -11,18 +13,30 @@ const dateFormat = "YYYY-MM-DDTHH:mm";
 type FormProps = {
   eventData: Pick<EventFormData, "group" | "start_time"> & {
     end_time?: EventFormData["end_time"];
+    id?: EventFormData["id"];
     title?: EventFormData["title"];
   };
+  events: Event[];
   onDelete?: () => void;
-  onSave: (eventData: EventFormData) => void;
+  onSave: (
+    eventData: Omit<EventFormData, "id"> & { id?: EventFormData["id"] }
+  ) => void;
   users: User[];
 };
 
-export const Form = ({ eventData, onDelete, onSave, users }: FormProps) => {
+export const Form = ({
+  eventData,
+  events,
+  onDelete,
+  onSave,
+  users,
+}: FormProps) => {
   const {
+    clearErrors,
     register,
     formState: { errors },
     handleSubmit,
+    setError,
     watch,
   } = useForm({
     defaultValues: {
@@ -36,7 +50,41 @@ export const Form = ({ eventData, onDelete, onSave, users }: FormProps) => {
     resolver: zodResolver(EventFormSchema),
   });
 
+  const endTime = watch("end_time");
+  const groupId = watch("group");
   const startTime = watch("start_time");
+
+  React.useEffect(() => {
+    const eventsInGroup = filterEventsByGroup(events, groupId).filter(
+      (event) => event.id !== eventData.id
+    );
+    const overlappingEvent = eventsInGroup.find((eventInGroup) =>
+      doEventsOverlap(
+        {
+          start_time: dayjs(startTime).valueOf(),
+          end_time: dayjs(endTime).valueOf(),
+        },
+        eventInGroup
+      )
+    );
+
+    if (overlappingEvent) {
+      setError("root.overlappingEvent", {
+        type: "custom",
+        message: "This event overlaps an existing event",
+      });
+    } else {
+      clearErrors("root.overlappingEvent");
+    }
+  }, [
+    clearErrors,
+    endTime,
+    eventData.id,
+    events,
+    groupId,
+    setError,
+    startTime,
+  ]);
 
   return (
     <form
@@ -49,6 +97,11 @@ export const Form = ({ eventData, onDelete, onSave, users }: FormProps) => {
         });
       })}
     >
+      <div>
+        {errors.root?.overlappingEvent && (
+          <p className="error-text">{errors.root.overlappingEvent.message}</p>
+        )}
+      </div>
       <div>
         <label htmlFor="event-title">Title</label>
         <input {...register("title")} id="event-title" />
@@ -107,7 +160,9 @@ export const Form = ({ eventData, onDelete, onSave, users }: FormProps) => {
         ) : (
           <div />
         )}
-        <button type="submit">Submit</button>
+        <button disabled={!!errors.root?.overlappingEvent} type="submit">
+          Submit
+        </button>
       </div>
     </form>
   );

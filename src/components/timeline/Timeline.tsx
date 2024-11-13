@@ -40,6 +40,7 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
             group: selectedGroup.id.toString(),
             start_time: startTime,
           }}
+          events={events}
           onSave={(formData) => {
             addEvent(formData);
             closeDialog();
@@ -91,9 +92,11 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
           eventData={{
             end_time: clickedEvent.end_time,
             group: clickedEvent.group,
+            id: clickedEvent.id,
             start_time: clickedEvent.start_time,
             title: clickedEvent.title,
           }}
+          events={events}
           onDelete={() => {
             deleteEvent(clickedEvent.id);
             closeDialog();

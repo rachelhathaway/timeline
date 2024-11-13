@@ -5,7 +5,10 @@ import { Event } from "./data/events";
 export const filterEventsByGroup = (events: Event[], groupId: string) =>
   events.filter((event) => event.group === groupId);
 
-export const doEventsOverlap = (firstEvent: Event, secondEvent: Event) => {
+export const doEventsOverlap = (
+  firstEvent: Pick<Event, "end_time" | "start_time">,
+  secondEvent: Event
+) => {
   const firstDates = {
     start: dayjs(firstEvent.start_time),
     end: dayjs(firstEvent.end_time),

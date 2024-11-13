@@ -20,7 +20,7 @@ export const EventsProvider = ({
   const { openDialog } = React.useContext(DialogContext);
   const [events, setEvents] = React.useState(initialEvents);
 
-  const addEvent = React.useCallback((eventData: EventFormData) => {
+  const addEvent = React.useCallback((eventData: Omit<EventFormData, "id">) => {
     const { end_time, start_time, ...restEventData } = eventData;
 
     setEvents((currentEvents) => [
