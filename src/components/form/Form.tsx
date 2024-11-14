@@ -98,11 +98,6 @@ export const Form = ({
       })}
     >
       <div>
-        {errors.root?.overlappingEvent && (
-          <p className="error-text">{errors.root.overlappingEvent.message}</p>
-        )}
-      </div>
-      <div>
         <label htmlFor="event-title">Title</label>
         <input {...register("title")} id="event-title" />
         {errors.title && <p className="error-text">{errors.title.message}</p>}
@@ -152,6 +147,13 @@ export const Form = ({
           )}
         </div>
       </div>
+      {errors.root?.overlappingEvent && (
+        <div>
+          {errors.root?.overlappingEvent && (
+            <p className="error-text">{errors.root.overlappingEvent.message}</p>
+          )}
+        </div>
+      )}
       <div>
         {onDelete ? (
           <button onClick={onDelete} type="button">
