@@ -122,6 +122,7 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
       defaultTimeStart={today.startOf("day").toDate()}
       groups={groups}
       items={events}
+      lineHeight={50}
       onCanvasDoubleClick={handleCanvasDoubleClick}
       onItemDoubleClick={handleItemDoubleClick}
       onItemMove={handleEventMove}
