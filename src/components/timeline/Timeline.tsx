@@ -75,10 +75,15 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
   ) => {
     const resizedEvent = events.find((event) => event.id === eventId);
 
-    if (resizedEvent) {
+    if (resizedEvent && edge !== "left") {
       updateEvent(eventId, {
-        end_time: edge === "left" ? resizedEvent.end_time : newTime,
-        start_time: edge === "left" ? newTime : resizedEvent.start_time,
+        end_time: dayjs
+          .max(
+            dayjs(newTime),
+            dayjs(resizedEvent.start_time).add(10, "minutes")
+          )
+          .valueOf(),
+        start_time: resizedEvent.start_time,
       });
     }
   };

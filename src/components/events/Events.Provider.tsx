@@ -7,7 +7,6 @@ import {
   doEventsOverlap,
   filterEventsByGroup,
   isEventTooLong,
-  isEventTooShort,
   isTimeInPast,
 } from "../../utils";
 import { DialogContext } from "../dialog/Dialog.Context";
@@ -51,12 +50,6 @@ export const EventsProvider = ({
           ...eventToUpdate,
           ...eventData,
         };
-
-        if (isEventTooShort(updatedEvent)) {
-          updatedEvent.end_time = dayjs(updatedEvent.start_time)
-            .add(10, "minutes")
-            .valueOf();
-        }
 
         if (isTimeInPast(updatedEvent.start_time)) {
           openDialog("Cannot move event start to the past");
