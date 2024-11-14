@@ -52,6 +52,12 @@ export const EventsProvider = ({
           ...eventData,
         };
 
+        if (isEventTooShort(updatedEvent)) {
+          updatedEvent.end_time = dayjs(updatedEvent.start_time)
+            .add(10, "minutes")
+            .valueOf();
+        }
+
         if (isTimeInPast(updatedEvent.start_time)) {
           openDialog("Cannot move event start to the past");
 
@@ -60,12 +66,6 @@ export const EventsProvider = ({
 
         if (isEventTooLong(updatedEvent)) {
           openDialog("Event duration cannot exceed 24 hours");
-
-          return currentEvents;
-        }
-
-        if (isEventTooShort(updatedEvent)) {
-          openDialog("Event end time cannot be before its start time");
 
           return currentEvents;
         }
