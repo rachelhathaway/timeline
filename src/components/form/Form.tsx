@@ -143,7 +143,7 @@ export const Form = ({
               setValueAs: (value) => dayjs(value).toISOString(),
             })}
             id="end-time"
-            min={startTime}
+            min={dayjs(startTime).format(dateFormat)}
             max={dayjs(startTime).add(24, "hours").format(dateFormat)}
             type="datetime-local"
           />
