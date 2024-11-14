@@ -4,6 +4,7 @@ import ReactCalendarTimeline, {
   type ReactCalendarTimelineProps,
   type TimelineItemBase,
   DateHeader,
+  Id,
   SidebarHeader,
   TimelineHeaders,
 } from "react-calendar-timeline";
@@ -29,6 +30,9 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
   const { closeDialog, openDialog } = React.useContext(DialogContext);
   const { events, addEvent, deleteEvent, updateEvent } =
     React.useContext(EventsContext);
+  const [selected, setSelected] = React.useState<string[]>([]);
+
+  const handleCanvasClick = () => setSelected([]);
 
   const handleCanvasDoubleClick = (groupId: string, startTime: number) => {
     const selectedGroup = groups.find((group) => group.id === groupId);
@@ -120,6 +124,16 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
     }
   };
 
+  const handleItemSelect = (eventId: Id) => {
+    const selectedEvent = events.find((event) => event.id === eventId);
+
+    setSelected(
+      selectedEvent && isTimeInPast(selectedEvent?.start_time)
+        ? []
+        : [eventId.toString()]
+    );
+  };
+
   return (
     <ReactCalendarTimeline<Item>
       canResize="both"
@@ -128,10 +142,13 @@ export const Timeline = ({ groups, users }: TimelineProps) => {
       groups={groups}
       items={events}
       lineHeight={50}
+      onCanvasClick={handleCanvasClick}
       onCanvasDoubleClick={handleCanvasDoubleClick}
       onItemDoubleClick={handleItemDoubleClick}
       onItemMove={handleEventMove}
       onItemResize={handleEventResize}
+      onItemSelect={handleItemSelect}
+      selected={selected}
     >
       <TimelineHeaders className="sticky-header">
         <SidebarHeader>
