@@ -14,6 +14,6 @@ export const Dialog = React.forwardRef<
     <div>
       <button onClick={closeDialog}>X</button>
     </div>
-    {children}
+    {typeof children === "string" ? <p>{children}</p> : children}
   </dialog>
 ));
