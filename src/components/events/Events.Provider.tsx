@@ -41,6 +41,22 @@ export const EventsProvider = ({
 
   const updateEvent = React.useCallback(
     (eventId: string, eventData: Partial<EventFormData>) => {
+      if (
+        eventData.end_time &&
+        eventData.start_time &&
+        isEventTooLong(eventData.start_time, eventData.end_time)
+      ) {
+        openDialog("Event duration cannot exceed 24 hours");
+
+        return;
+      }
+
+      if (eventData.start_time && isTimeInPast(eventData.start_time)) {
+        openDialog("Cannot move event start to the past");
+
+        return;
+      }
+
       setEvents((currentEvents) => {
         const eventToUpdateIndex = currentEvents.findIndex(
           (event) => event.id === eventId
@@ -50,18 +66,6 @@ export const EventsProvider = ({
           ...eventToUpdate,
           ...eventData,
         };
-
-        if (isTimeInPast(updatedEvent.start_time)) {
-          openDialog("Cannot move event start to the past");
-
-          return currentEvents;
-        }
-
-        if (isEventTooLong(updatedEvent)) {
-          openDialog("Event duration cannot exceed 24 hours");
-
-          return currentEvents;
-        }
 
         const eventsInGroup = filterEventsByGroup(
           currentEvents,

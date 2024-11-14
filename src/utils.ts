@@ -26,7 +26,7 @@ export const doEventsOverlap = (
   );
 };
 
-export const isEventTooLong = (event: Event) =>
-  dayjs(event.end_time).isAfter(dayjs(event.start_time).add(24, "hours"));
+export const isEventTooLong = (startTime: number, endTime: number) =>
+  dayjs(endTime).isAfter(dayjs(startTime).add(24, "hours"));
 
 export const isTimeInPast = (time: number) => dayjs(time).isBefore(dayjs());
