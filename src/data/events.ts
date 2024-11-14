@@ -3,15 +3,41 @@ import { faker } from "@faker-js/faker";
 import dayjs from "dayjs";
 import { z } from "zod";
 
+import { isEventTooLong, isTimeInPast } from "../utils";
+
 const IdSchema = z.string().uuid();
 const TitleSchema = z.string().min(5).max(35);
 
-export const EventFormSchema = z.object({
-  end_time: z.string().datetime(),
-  group: IdSchema,
-  start_time: z.string().datetime(),
-  title: TitleSchema,
-});
+export const EventFormSchema = z
+  .object({
+    end_time: z.string().datetime(),
+    group: IdSchema,
+    start_time: z.string().datetime(),
+    title: TitleSchema,
+  })
+  .refine((formData) => !isTimeInPast(dayjs(formData.start_time).valueOf()), {
+    message: "Start date cannot be in the past",
+    path: ["start_time"],
+  })
+  .refine(
+    (formData) =>
+      !dayjs(formData.end_time).isBefore(dayjs(formData.start_time)),
+    {
+      message: "End date must be after start date",
+      path: ["end_time"],
+    }
+  )
+  .refine(
+    (formData) =>
+      !isEventTooLong(
+        dayjs(formData.start_time).valueOf(),
+        dayjs(formData.end_time).valueOf()
+      ),
+    {
+      message: "Event duration cannot exceed 24 hours",
+      path: ["end_time"],
+    }
+  );
 
 export const EventSchema = z.object({
   canMove: z.boolean(),
